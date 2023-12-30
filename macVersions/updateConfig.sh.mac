@@ -1,0 +1,4 @@
+#!/bin/bash
+
+node /Volumes/MAC/coding/scripts/homebridge/updateConfig.js &&
+sed -n '/[^ ,]/p' /Volumes/MAC/coding/scripts/homebridge/config.ini

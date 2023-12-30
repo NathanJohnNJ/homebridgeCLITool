@@ -1,0 +1,120 @@
+#!/usr/local/bin/node
+
+const prompt = require("prompt-sync")();
+const exclusions = ['Bedroom Motion Sensor 2F6E', 'TuyaPlatform 0BA5', 'TuyaWebPlatform 2CFF', 'TuyaIR 8B72', 'Homebridge 57E5 05BE', 'Contact Sensor', 'MotionSensor', 'WindowCovering'];
+const getToken = async () => {
+    // console.log('Hi from getToken()')
+    const url = 'https://nathanjohnthedom.com:8581/api/auth/login'
+    const data = '{"username":"NathanJohn", "password":"Oldhall5458!", "otp": "string"}'
+    const headers = {
+        'accept': '*/*',
+        'Content-Type': 'application/json'
+    } 
+    const response = await fetch(url, {
+        method: 'POST',
+        headers: headers,
+        body: data
+    })
+    if (!response.ok) {
+        throw new Error(response.statusText)
+        }
+    const responseData = await response.json()
+    const token = responseData.access_token
+    // console.log(token)
+    return token
+  }
+
+const fetchData = async () => {
+    const token = await getToken();
+    try {
+    const url = 'https://nathanjohnthedom.com:8581/api/accessories'
+    const response = await fetch(url, {
+        headers:{"accept" : "*/*",
+        "Authorization": "Bearer " + token
+        }
+    })
+    if (!response.ok) {
+        throw new Error(response.statusText)
+        }
+    const data = await response.json()
+    // console.log(data)
+    let homeData = [];
+    data.map((accessory, i) => {
+        if(exclusions.includes(accessory.humanType)){
+            console.log('Excluding ' + accessory.serviceName)
+       }else if(exclusions.includes(accessory.type)){
+             console.log('Excluding ' + accessory.serviceName)
+        }else if(exclusions.includes(accessory.serviceName)){
+            console.log('Excluding ' + accessory.serviceName)
+        } else{
+            homeData.push({
+                name: accessory.serviceName,
+                uniqueId: accessory.uniqueId
+              })
+        }
+    })
+    return(homeData)
+    } catch (err) {
+      console.log(err)
+    }
+}
+function getName(accessory){
+    const userInput = prompt('What do you want to call ' + accessory.name + '?  ')
+    return userInput
+}
+const processData = async () =>{
+    const data = await fetchData()
+    let newArray= [];
+    data.map((accessory) => {
+        const include = prompt('Do you want to include ' + accessory.name + '? (Y/n)  ')
+        if (include=='Y'){
+            const userInput = getName(accessory)
+            newArray.push( {
+                name: userInput,
+                uniqueId: accessory.uniqueId
+            })
+        } else if (include=='y'){
+            const userInput = getName(accessory)
+            newArray.push( {
+                name: userInput,
+                uniqueId: accessory.uniqueId
+            })
+        } else if (include=='yes'){
+            const userInput = getName(accessory)
+            newArray.push( {
+                name: userInput,
+                uniqueId: accessory.uniqueId
+            })
+        } else {
+            console.log('Not including ' + accessory.name + '.')
+        }
+    })
+    let lastArray = []
+    newArray.map((accessory) => {
+        const outPut = `
+        ${accessory.name} = ${accessory.uniqueId}
+        `
+        lastArray.push(outPut)
+    })
+    return lastArray
+} 
+
+const fs = require('fs');
+const makeConfig = async() => {
+    const finalData = await processData()
+    const content =  `
+    [smart]
+    ${finalData}
+    `
+    fs.writeFile(
+        'config.ini', 
+        content, 
+        (error) => {
+          if (error) {
+            console.log(error);
+          }
+          console.log('File written successfully');
+        }
+      );
+}
+makeConfig()
