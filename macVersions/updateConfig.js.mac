@@ -1,11 +1,18 @@
 #!/usr/local/bin/node
 
+// import dotenv for hiding sensitive information, import prompt for user input later in the script
+require('dotenv').config()
 const prompt = require("prompt-sync")();
+// Create an exclusions list of devices I don't want include. Also in this list are the devices that are made for each plug-in, so not actual devices to be controlled.
 const exclusions = ['Bedroom Motion Sensor 2F6E', 'TuyaPlatform 0BA5', 'TuyaWebPlatform 2CFF', 'TuyaIR 8B72', 'Homebridge 57E5 05BE', 'Contact Sensor', 'MotionSensor', 'WindowCovering'];
+
+// First get authorization token for the next request
 const getToken = async () => {
     // console.log('Hi from getToken()')
-    const url = 'https://nathanjohnthedom.com:8581/api/auth/login'
-    const data = '{"username":"NathanJohn", "password":"Oldhall5458!", "otp": "string"}'
+const myDomain = process.env.DOMAIN
+const myPort = process.env.PORT
+    const url = `https://${myDomain}:${myPort}/api/auth/login`
+    const data = '{"username":process.env.USERNAME, "password":process.env.PASSWORD, "otp": "string"}'
     const headers = {
         'accept': '*/*',
         'Content-Type': 'application/json'
@@ -24,12 +31,13 @@ const getToken = async () => {
     return token
   }
 
+// Next get the name and unique ID for each device linked to homebridge
 const fetchData = async () => {
     const token = await getToken();
     try {
-    const url = 'https://nathanjohnthedom.com:8581/api/accessories'
+    const url = `https://${myDomain}:${myPort}/api/accessories`
     const response = await fetch(url, {
-        headers:{"accept" : "*/*",
+        headers:{"accept" : "* / *",
         "Authorization": "Bearer " + token
         }
     })
@@ -38,6 +46,8 @@ const fetchData = async () => {
         }
     const data = await response.json()
     // console.log(data)
+// by declaring a new array here and then using the map function to push to it instead of using the array the map
+//function will create itself allows me to exclude any devices I don't wish to control, so therefore don't need in my config.ini file
     let homeData = [];
     data.map((accessory, i) => {
         if(exclusions.includes(accessory.humanType)){
@@ -58,6 +68,8 @@ const fetchData = async () => {
       console.log(err)
     }
 }
+
+// function to allow me to assign a name thats quicker to type and easier to remember than the given name from homebridge
 function getName(accessory){
     const userInput = prompt('What do you want to call ' + accessory.name + '?  ')
     return userInput
@@ -107,7 +119,7 @@ const makeConfig = async() => {
     ${finalData}
     `
     fs.writeFile(
-        'config.ini', 
+        'config.tmp', 
         content, 
         (error) => {
           if (error) {

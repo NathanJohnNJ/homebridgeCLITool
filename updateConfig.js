@@ -116,7 +116,7 @@ const processData = async () =>{
 const fs = require('fs');
 
 //final function that will actually be the only function called, sparking a chain reaction through the others.
-//This function will commit the formatted strings from above to the local config.ini file.
+//This function will commit the formatted strings from above to the local config.tmp file.
 // If the file doesn't exist it will create it
 const makeConfig = async() => {
     const finalData = await processData()
@@ -125,7 +125,7 @@ const makeConfig = async() => {
     ${finalData}
     `
     fs.writeFile(
-        'config.ini',
+        'config.tmp',
         content,
         (error) => {
           if (error) {

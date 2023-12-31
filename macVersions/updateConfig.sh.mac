@@ -1,4 +1,9 @@
 #!/bin/bash
-
-node /Volumes/MAC/coding/scripts/homebridge/updateConfig.js &&
-sed -n '/[^ ,]/p' /Volumes/MAC/coding/scripts/homebridge/config.ini
+# Backup old config.ini incase of any accidents
+mv /Volumes/MAC/coding/scripts/homebridgeCLITool/macVersion/config.ini /Volumes/MAC/coding/scripts/homebridgeCLITool/macVersion/config.ini.old
+# run nodeJS script which will output config.tmp
+node /Volumes/MAC/coding/scripts/homebridgeCLITool/macVersion/updateConfig.js &&
+# if above completes successfully remove the lines that just contain commas and save to config.ini
+sed -n '/[^ ,]/p' /Volumes/MAC/coding/scripts/homebridgeCLITool/macVersion/config.tmp >> /Volumes/MAC/coding/scripts/homebridgeCLITool/macVersion/config.ini &&
+# if above command completes successfully remove the config.tmp file
+rm /Volumes/MAC/coding/scripts/homebridgeCLITool/macVersion/config.tmp

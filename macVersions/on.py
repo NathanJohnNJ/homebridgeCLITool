@@ -37,7 +37,7 @@ Headers = {
     'Authorization': Auth,
 }
 #contorl the device with put request
-Data = '{"characteristicType": "On", "value": "0"}'
+Data = '{"characteristicType": "On", "value": "1"}'
 url = f"https://{myDomain}:{myPort}/api/accessories/"
 light = str(string)
 Url = ''.join([url, light])
