@@ -13,7 +13,7 @@ myPort = os.getenv("PORT")
 
 # read the config.ini file to get the ID for the given device
 config = configparser.ConfigParser()
-config.read('/home/pi/scripts/homebridge/config.ini')
+config.read('/home/pi/scripts/homebridgeCLITool/config.ini')
 string = config['smart'][str(sys.argv[1])]
 
 #first get auth token

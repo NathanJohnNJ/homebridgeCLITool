@@ -23,16 +23,16 @@ if [ "$1" = "help" ];
 #	echo "		Toiletries Chargers: toiletries"
 #	echo "		Wardrobe Lightstrip: wardrobe"
 	else
-	state=$(/home/pi/scripts/homebridge/getstate.sh $1)
+	state=$(/home/pi/scripts/homebridgeCLITool/getstate.sh $1)
 	if [ $state -eq 1 ]; then
 		until [ $state -eq 0 ]; do
-			/home/pi/scripts/homebridge/off.sh $1
+			/home/pi/scripts/homebridgeCLITool/off.sh $1
 			echo "$1 is now off."
 			break
 		done
 	else
 			until [ $state -eq 1 ]; do
-			/home/pi/scripts/homebridge/on.sh $1
+			/home/pi/scripts/homebridgeCLITool/on.sh $1
 					echo "$1 is now on."
 			break
 		done
