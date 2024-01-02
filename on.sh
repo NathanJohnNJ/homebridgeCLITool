@@ -1,3 +1,3 @@
 #!/bin/bash
 
-/usr/bin/python3 /home/pi/scripts/homebridge/on.py $1
+/usr/bin/python3 /home/pi/scripts/homebridgeCLITool/on.py $1
