@@ -46,4 +46,3 @@ Stop = 8
 Slice_object = slice(Start,Stop)
 final = str(newList)[Slice_object]
 print(final)
-

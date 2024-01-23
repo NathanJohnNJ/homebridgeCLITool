@@ -9,10 +9,12 @@ const exclusions = ['Bedroom Motion Sensor 2F6E', 'TuyaPlatform 0BA5', 'TuyaWebP
 // First get authorization token for the next request
 const getToken = async () => {
     // console.log('Hi from getToken()')
-const myDomain = process.env.DOMAIN
-const myPort = process.env.PORT
+    const myDomain = process.env.DOMAIN
+    const myPort = process.env.PORT
+    const myUsername = process.env.USERNAME
+    const myPassword = process.env.PASSWORD
     const url = `https://${myDomain}:${myPort}/api/auth/login`
-    const data = '{"username":process.env.USERNAME, "password":process.env.PASSWORD, "otp": "string"}'
+    const data = `{"username":"${myUsername}", "password":"${myPassword}", "otp": "string"}`
     const headers = {
         'accept': '* / *',
         'Content-Type': 'application/json'
