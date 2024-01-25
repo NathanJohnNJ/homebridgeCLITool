@@ -1,7 +1,10 @@
 #!/usr/local/bin/node
-
 // import dotenv for hiding sensitive information, import prompt for user input later in the script
 require('dotenv').config()
+const myDomain = process.env.DOMAIN
+const myPort = process.env.PORT
+const myUsername = process.env.USERNAME
+const myPassword = process.env.PASSWORD
 const prompt = require("prompt-sync")();
 // Create an exclusions list of devices I don't want include. Also in this list are the devices that are made for each plug-in, so not actual devices to be controlled.
 const exclusions = ['Bedroom Motion Sensor 2F6E', 'TuyaPlatform 0BA5', 'TuyaWebPlatform 2CFF', 'TuyaIR 8B72', 'Homebridge 57E5 05BE', 'Contact Sensor', 'MotionSensor', 'WindowCovering'];
@@ -9,10 +12,8 @@ const exclusions = ['Bedroom Motion Sensor 2F6E', 'TuyaPlatform 0BA5', 'TuyaWebP
 // First get authorization token for the next request
 const getToken = async () => {
     // console.log('Hi from getToken()')
-const myDomain = process.env.DOMAIN
-const myPort = process.env.PORT
     const url = `https://${myDomain}:${myPort}/api/auth/login`
-    const data = '{"username":process.env.USERNAME, "password":process.env.PASSWORD, "otp": "string"}'
+    const data = `{"username":"${myUsername}", "password":"${myPassword}", "otp": "string"}`
     const headers = {
         'accept': '*/*',
         'Content-Type': 'application/json'
@@ -27,7 +28,6 @@ const myPort = process.env.PORT
         }
     const responseData = await response.json()
     const token = responseData.access_token
-    // console.log(token)
     return token
   }
 
@@ -45,7 +45,6 @@ const fetchData = async () => {
         throw new Error(response.statusText)
         }
     const data = await response.json()
-    // console.log(data)
 // by declaring a new array here and then using the map function to push to it instead of using the array the map
 //function will create itself allows me to exclude any devices I don't wish to control, so therefore don't need in my config.ini file
     let homeData = [];

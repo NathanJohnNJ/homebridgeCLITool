@@ -1,3 +1,3 @@
 #!/bin/bash
-
-/usr/bin/python3 /home/pi/scripts/homebridgeCLITool/getstate.py $1
+source .env
+/usr/bin/python3 $MYPATH/getstate.py $1

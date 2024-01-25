@@ -10,10 +10,11 @@ myUser = os.getenv("USERNAME")
 myPass = os.getenv("PASSWORD")
 myDomain = os.getenv("DOMAIN")
 myPort = os.getenv("PORT")
+myPath = os.getenv("MYPATH")
 
 # read the config.ini file to get the ID for the given device
 config = configparser.ConfigParser()
-config.read('/home/pi/scripts/homebridgeCLITool/config.ini')
+config.read(f"{myPath}/config.ini")
 string = config['smart'][str(sys.argv[1])]
 
 #first get auth token

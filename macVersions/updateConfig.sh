@@ -1,5 +1,4 @@
 #!/bin/bash
-
 # Backup old config.ini if it exists
 if [ -e /Volumes/MAC/coding/NJCodes/gitRepos/homebridgeCLITool/macVersions/config.ini ]; then
 	mv /Volumes/MAC/coding/NJCodes/gitRepos/homebridgeCLITool/macVersions/config.ini /Volumes/MAC/coding/NJCodes/gitRepos/homebridgeCLITool/macVersions/config.ini.old

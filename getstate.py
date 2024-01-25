@@ -12,9 +12,10 @@ myUser = os.getenv("USERNAME")
 myPass = os.getenv("PASSWORD")
 myDomain = os.getenv("DOMAIN")
 myPort = os.getenv("PORT")
+myPath = os.getenv("MYPATH")
 
 config = configparser.ConfigParser()
-config.read('/home/pi/scripts/homebridgeCLITool/config.ini')
+config.read(f"{myPath}/config.ini")
 string = config['smart'][str(sys.argv[1])]
 headers = {
     'accept': '*/*',
