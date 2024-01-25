@@ -2,17 +2,17 @@
 
 // import dotenv for hiding sensitive information, import prompt for user input later in the script
 require('dotenv').config()
+const myDomain = process.env.DOMAIN
+const myPort = process.env.PORT
+const myUsername = process.env.USERNAME
+const myPassword = process.env.PASSWORD
 const prompt = require("prompt-sync")();
+
 // Create an exclusions list of devices I don't want include. Also in this list are the devices that are made for each plug-in, so not actual devices to be controlled.
 const exclusions = ['Bedroom Motion Sensor 2F6E', 'TuyaPlatform 0BA5', 'TuyaWebPlatform 2CFF', 'TuyaIR 8B72', 'Homebridge 57E5 05BE', 'Contact Sensor', 'MotionSensor', 'WindowCovering'];
-
 // First get authorization token for the next request
 const getToken = async () => {
     // console.log('Hi from getToken()')
-    const myDomain = process.env.DOMAIN
-    const myPort = process.env.PORT
-    const myUsername = process.env.USERNAME
-    const myPassword = process.env.PASSWORD
     const url = `https://${myDomain}:${myPort}/api/auth/login`
     const data = `{"username":"${myUsername}", "password":"${myPassword}", "otp": "string"}`
     const headers = {
